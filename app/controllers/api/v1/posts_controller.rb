@@ -1,5 +1,5 @@
 class Api::V1::PostsController < ApplicationController
-  before_action :set_post, only: [:show]
+  before_action :set_post, only: [:show, :destroy]
 
   def index
     @posts = Post.all
@@ -19,12 +19,17 @@ class Api::V1::PostsController < ApplicationController
     end
   end
 
+  def destroy
+    @post.destroy
+      head :no_content
+  end
+
   private
 
   def post_params
     params.require(:post).permit(:content, :createdAt)
   end
-  
+
   def set_post
     @post = Post.find(params[:id])
   end
