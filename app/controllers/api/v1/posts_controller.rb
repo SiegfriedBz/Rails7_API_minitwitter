@@ -1,21 +1,21 @@
 class Api::V1::PostsController < ApplicationController
-  before_action :set_post, only: [:show, :create]
-  
+  before_action :set_post, only: [:show]
+
   def index
-    posts = Post.all
-    render json: posts
+    @posts = Post.all
+    render json: @posts
   end
 
   def show
-   render json: post
+   render json: @post
   end
 
   def create
-    post = Post.new(post_params)
-    if post.save
-      render :show, status: :created, location: post
+    @post = Post.new(post_params)
+    if @post.save
+      render :show, status: :created, location: api_v1_post_url(@post)
     else
-      render json: post.errors, status: :unprocessable_entity 
+      render json: @post.errors, status: :unprocessable_entity 
     end
   end
 
@@ -24,9 +24,9 @@ class Api::V1::PostsController < ApplicationController
   def post_params
     params.require(:post).permit(:content, :createdAt)
   end
-
+  
   def set_post
-    post = Post.find(params(:id))
+    @post = Post.find(params[:id])
   end
 
 end
